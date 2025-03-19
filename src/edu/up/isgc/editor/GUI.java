@@ -11,7 +11,7 @@ public class GUI extends JFrame {
     private JPanel panel;
     private JPanel[] rows = new JPanel[3];
     private JButton generateVideo;
-    private JFileChooser chosenFile;
+    private JTextField prompt;
 
     //constructor
     public GUI() {
@@ -26,6 +26,7 @@ public class GUI extends JFrame {
     private void components() {
         panel();
         label();
+        textfield();
         button();
         rowInsertion();
     }
@@ -54,8 +55,18 @@ public class GUI extends JFrame {
         panel.add(Box.createVerticalStrut(10));
 
         //labels configuration and assignation
-        JLabel label = new JLabel("Selected the files that will create the video. Can be images or videos.");
-        rows[0].add(label);
+        JLabel instruction = new JLabel("Selected the files that will create the video. Can be images or videos.");
+        JLabel caption = new JLabel("Write a short prompt that describes the mood of the video.");
+
+        rows[0].add(instruction);
+        rows[1].add(caption);
+    }
+
+    private void textfield() {
+        prompt = new JTextField(20);
+        prompt.setEditable(true);
+
+        rows[1].add(prompt);
     }
 
     //buttons configuration
@@ -81,7 +92,7 @@ public class GUI extends JFrame {
         chooseFile.addActionListener(selectFile);
 
         //insert buttons
-        rows[1].add(chooseFile);
+        rows[0].add(chooseFile);
         rows[2].add(generateVideo);
     }
 
@@ -92,7 +103,7 @@ public class GUI extends JFrame {
 
     //fileChooser function
     private void fileChooser() {
-        chosenFile = new JFileChooser();
+        JFileChooser chosenFile = new JFileChooser();
         chosenFile.setDialogTitle("File Selector");
         chosenFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
