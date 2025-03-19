@@ -6,15 +6,18 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUI extends JFrame {
 
     //global variables
     private JPanel panel;
     private JPanel[] rows = new JPanel[3];
-    private JButton generateVideo;
-    private boolean filesSelected = false;
+    private JButton generateVideoButton;
     private JTextField prompt = new JTextField(20);
+    private List<File> inputFiles = new ArrayList<>();
 
     //constructor
     public GUI() {
@@ -72,24 +75,19 @@ public class GUI extends JFrame {
         DocumentListener editData = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                fullData();
+                checkGenerateButtonState();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                fullData();
+                checkGenerateButtonState();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                fullData();
+                checkGenerateButtonState();
             }
 
-            private void fullData() {
-                if(!prompt.getText().isEmpty() && filesSelected){
-                    generateVideo.setEnabled(true);
-                }
-            }
         };
 
         //text field assignation and reconfiguration
@@ -101,9 +99,9 @@ public class GUI extends JFrame {
     //buttons configuration
     private void button() {
 
-        generateVideo = new JButton("Generate Video");
+        generateVideoButton = new JButton("Generate Video");
         //generateVideo.setBounds(400, 100, 200, 50);
-        generateVideo.setEnabled(false);
+        generateVideoButton.setEnabled(false);
 
         JButton chooseFile = new JButton("Select files");
         //chooseFile.setBounds(400, 100, 200, 50);
@@ -113,16 +111,24 @@ public class GUI extends JFrame {
         ActionListener selectFile = _ -> fileChooser();
 
         ActionListener generateVideoTrigger = e -> {
-
+            if (!inputFiles.isEmpty()) {
+                System.out.println("Generating video from selected files:");
+                for (File file : inputFiles) {
+                    System.out.println(file.getAbsolutePath());
+                    // Lógica para crear el video usando FFmpeg
+                }
+            } else {
+                System.out.println("No files selected.");
+            }
         };
 
         //action assignation
-        generateVideo.addActionListener(generateVideoTrigger);
+        generateVideoButton.addActionListener(generateVideoTrigger);
         chooseFile.addActionListener(selectFile);
 
         //insert buttons
         rows[0].add(chooseFile);
-        rows[2].add(generateVideo);
+        rows[2].add(generateVideoButton);
     }
 
     //insert different rows in main panel
@@ -135,7 +141,6 @@ public class GUI extends JFrame {
         JFileChooser chosenFile = new JFileChooser();
         chosenFile.setDialogTitle("File Selector");
         chosenFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
         chosenFile.setAcceptAllFileFilterUsed(false);
         chosenFile.setMultiSelectionEnabled(true);
 
@@ -146,9 +151,26 @@ public class GUI extends JFrame {
         chosenFile.addChoosableFileFilter(fileFilter);
 
         int selection = chosenFile.showOpenDialog(this);
+
         if (selection == JFileChooser.APPROVE_OPTION) {
-            filesSelected = true;
+            inputFiles.clear();
+
+            for(File file : chosenFile.getSelectedFiles()) {
+                inputFiles.add(file);
+            }
+
+            System.out.println("Files selected correctly: ");
+            for(File file : inputFiles) {
+                System.out.println(file.getAbsolutePath());
+            }
+
+            checkGenerateButtonState();
         }
+
+
     }
 
+    private void checkGenerateButtonState() {
+        generateVideoButton.setEnabled(!prompt.getText().isEmpty() && !inputFiles.isEmpty());
+    }
 }
