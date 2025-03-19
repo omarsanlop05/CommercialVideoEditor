@@ -2,6 +2,8 @@ package edu.up.isgc.editor;
 
 //libraries
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -11,7 +13,8 @@ public class GUI extends JFrame {
     private JPanel panel;
     private JPanel[] rows = new JPanel[3];
     private JButton generateVideo;
-    private JTextField prompt;
+    private boolean filesSelected = false;
+    private JTextField prompt = new JTextField(20);
 
     //constructor
     public GUI() {
@@ -26,7 +29,7 @@ public class GUI extends JFrame {
     private void components() {
         panel();
         label();
-        textfield();
+        textField();
         button();
         rowInsertion();
     }
@@ -62,9 +65,35 @@ public class GUI extends JFrame {
         rows[1].add(caption);
     }
 
-    private void textfield() {
-        prompt = new JTextField(20);
-        prompt.setEditable(true);
+    //text field configurations
+    private void textField() {
+
+        //activate calculate button once it has received data
+        DocumentListener editData = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                fullData();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                fullData();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                fullData();
+            }
+
+            private void fullData() {
+                if(!prompt.getText().isEmpty() && filesSelected){
+                    generateVideo.setEnabled(true);
+                }
+            }
+        };
+
+        //text field assignation and reconfiguration
+        prompt.getDocument().addDocumentListener(editData);
 
         rows[1].add(prompt);
     }
@@ -118,7 +147,7 @@ public class GUI extends JFrame {
 
         int selection = chosenFile.showOpenDialog(this);
         if (selection == JFileChooser.APPROVE_OPTION) {
-            generateVideo.setEnabled(true);
+            filesSelected = true;
         }
     }
 
