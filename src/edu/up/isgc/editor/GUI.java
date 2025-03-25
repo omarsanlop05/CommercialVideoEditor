@@ -112,8 +112,11 @@ public class GUI extends JFrame {
 
         ActionListener generateVideoTrigger = e -> {
             if (!inputFiles.isEmpty()) {
+                Tools editor = new Tools();
+                editor.setInputFiles(inputFiles);
+                editor.arrangeFiles();
                 System.out.println("Generating video from selected files:");
-                for (File file : inputFiles) {
+                for (File file : editor.getInputFiles()) {
                     System.out.println(file.getAbsolutePath());
                     // Lógica para crear el video usando FFmpeg
                 }
@@ -166,7 +169,6 @@ public class GUI extends JFrame {
 
             checkGenerateButtonState();
         }
-
 
     }
 
