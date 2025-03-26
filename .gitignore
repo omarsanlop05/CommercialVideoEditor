@@ -30,3 +30,7 @@ bin/
 
 ### User ###
 /media/
+/exiftool-13.25_64/
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe

@@ -118,8 +118,9 @@ public class GUI extends JFrame {
                 System.out.println("Generating video from selected files:");
                 for (File file : editor.getInputFiles()) {
                     System.out.println(file.getAbsolutePath());
-                    // Lógica para crear el video usando FFmpeg
                 }
+                editor.joinFiles(editor.getInputFiles());
+                System.out.println("The video has been generated");
             } else {
                 System.out.println("No files selected.");
             }
