@@ -112,14 +112,18 @@ public class GUI extends JFrame {
 
         ActionListener generateVideoTrigger = e -> {
             if (!inputFiles.isEmpty()) {
-                Tools editor = new Tools();
-                editor.setInputFiles(inputFiles);
-                editor.arrangeFiles();
+                FileManager manager = new FileManager();
+                manager.setInputFiles(inputFiles);
+                manager.arrangeFiles();
                 System.out.println("Generating video from selected files:");
-                for (File file : editor.getInputFiles()) {
+                for (File file : manager.getInputFiles()) {
                     System.out.println(file.getAbsolutePath());
                 }
-                editor.joinFiles(editor.getInputFiles());
+
+                FFmpegEditor ffmpegEditor = new FFmpegEditor();
+                ffmpegEditor.joinFiles(manager.getInputFiles());
+                //ffmpegEditor.createCollage(manager.getInputFiles());
+
                 System.out.println("The video has been generated");
             } else {
                 System.out.println("No files selected.");
