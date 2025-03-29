@@ -209,7 +209,7 @@ public class FFmpegEditor {
         }
     }
 
-    public File createCollage(List<File> inputFiles) {
+    private File createCollage(List<File> inputFiles) {
         if (inputFiles == null || inputFiles.isEmpty()) {
             System.out.println("No hay archivos para el collage");
             return null;
@@ -409,17 +409,5 @@ public class FFmpegEditor {
         } catch (Exception e) {
             System.err.println("FFmpeg falló al crear el collage: " + e.getMessage());
         }
-    }
-
-
-    private String imageBase64(File image) {
-        try {
-            Path path = Path.of(image.getAbsolutePath());
-            byte[] fileContent = Files.readAllBytes(path);
-            return Base64.getEncoder().encodeToString(fileContent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 }

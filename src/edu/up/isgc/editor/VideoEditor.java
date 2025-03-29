@@ -6,9 +6,12 @@ public class VideoEditor {
 
         //create new window
         GUI editor = new GUI();
-        editor.setVisible(true);
+        //editor.setVisible(true);
 
         //set focus on window (avoid text field focus)
         editor.requestFocusInWindow();
+
+        ChatGPT imagen = new ChatGPT();
+        imagen.downloadImage("Generate an image that represents relaxing beach vibe", "testeohermano.jpg");
     }
 }

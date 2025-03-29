@@ -122,7 +122,7 @@ public class GUI extends JFrame {
 
                 FFmpegEditor ffmpegEditor = new FFmpegEditor();
                 ffmpegEditor.joinFiles(manager.getInputFiles());
-                //ffmpegEditor.createCollage(manager.getInputFiles());
+
 
                 System.out.println("The video has been generated");
             } else {
