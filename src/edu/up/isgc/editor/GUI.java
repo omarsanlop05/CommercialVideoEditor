@@ -18,6 +18,7 @@ public class GUI extends JFrame {
     private JButton generateVideoButton;
     private JTextField prompt = new JTextField(20);
     private List<File> inputFiles = new ArrayList<>();
+    private String givenPrompt = "";
 
     //constructor
     public GUI() {
@@ -110,6 +111,7 @@ public class GUI extends JFrame {
         //select file
         ActionListener selectFile = _ -> fileChooser();
 
+        //Actions for generating video
         ActionListener generateVideoTrigger = e -> {
             if (!inputFiles.isEmpty()) {
                 FileManager manager = new FileManager();
@@ -121,10 +123,8 @@ public class GUI extends JFrame {
                 }
 
                 FFmpegEditor ffmpegEditor = new FFmpegEditor();
-                ffmpegEditor.joinFiles(manager.getInputFiles());
-
-
-                System.out.println("The video has been generated");
+                File video = ffmpegEditor.joinFiles(manager.getInputFiles(), givenPrompt);
+                System.out.println("Process finished, video generated: " + video.getAbsolutePath());
             } else {
                 System.out.println("No files selected.");
             }
@@ -178,6 +178,9 @@ public class GUI extends JFrame {
     }
 
     private void checkGenerateButtonState() {
-        generateVideoButton.setEnabled(!prompt.getText().isEmpty() && !inputFiles.isEmpty());
+        if(!prompt.getText().isEmpty() && !inputFiles.isEmpty()){
+            generateVideoButton.setEnabled(true);
+            givenPrompt = prompt.getText();
+        }
     }
 }

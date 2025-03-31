@@ -35,3 +35,5 @@ ffmpeg.exe
 ffplay.exe
 ffprobe.exe
 .env
+output-files
+final-output-video
