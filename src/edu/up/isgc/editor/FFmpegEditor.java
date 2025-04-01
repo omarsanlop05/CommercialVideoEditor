@@ -1,5 +1,6 @@
 package edu.up.isgc.editor;
 
+//libraries
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -81,7 +82,7 @@ public class FFmpegEditor {
             //Uses taken frame for vision and video for duration (calculate needed words)
             System.out.println("Creating temp audios.");
             for (int i=0; i<tempFiles.size(); i++) {
-                File audio = chatGPT.ImageToAudio(tempImages.get(i), tempFiles.get(i));
+                File audio = chatGPT.imageToAudio(tempImages.get(i), tempFiles.get(i));
                 tempAudios.add(audio);
             }
 
@@ -127,7 +128,25 @@ public class FFmpegEditor {
             System.err.println("Error joining videos: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            System.out.println("Y asi nomás quedó plebes - El pirata de culiacán");
+            System.out.println("Process finished! Wait a few seconds a search for final-output-video");
+            System.out.println("WARNING: ERASING TEMPORARY FILES");
+            for (File file : tempFiles) {
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+
+            for (File image : tempImages) {
+                if (image.exists()) {
+                    image.delete();
+                }
+            }
+
+            for (File audio : tempAudios) {
+                if (audio.exists()) {
+                    audio.delete();
+                }
+            }
         }
 
         return outputFile;
@@ -176,6 +195,8 @@ public class FFmpegEditor {
             );
 
             pb.redirectErrorStream(true);
+
+            //execute command
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -222,8 +243,9 @@ public class FFmpegEditor {
 
             System.out.println("Output file path: " + output.getAbsolutePath());
             pb.redirectErrorStream(true);
-            Process process = pb.start();
 
+            //execute command
+            Process process = pb.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -304,9 +326,9 @@ public class FFmpegEditor {
     }
 
     //Calls functions necessary for collage
-    private File createCollage(List<File> inputFiles) {
+    public File createCollage(List<File> inputFiles) {
         if (inputFiles == null || inputFiles.isEmpty()) {
-            System.out.println("No hay archivos para el collage");
+            System.out.println("The are no files for the collage");
             return null;
         }
 
@@ -384,6 +406,8 @@ public class FFmpegEditor {
 
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.redirectErrorStream(true);
+
+            //execute command
             Process process = pb.start();
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
@@ -556,6 +580,8 @@ public class FFmpegEditor {
 
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.redirectErrorStream(true);
+
+            //execute command
             Process process = pb.start();
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
@@ -625,7 +651,7 @@ public class FFmpegEditor {
     }
 
     //Adds the audio to the final outputVideo
-    public void addAudioVideo(File audio, File video, File output) {
+    private void addAudioVideo(File audio, File video, File output) {
         int delayMs = 3000;
 
         //Adds audio after the 3 seconds the first postcard shows.
@@ -647,6 +673,7 @@ public class FFmpegEditor {
 
         pb.redirectErrorStream(true);
 
+        //execute command
         try {
             Process process = pb.start();
 

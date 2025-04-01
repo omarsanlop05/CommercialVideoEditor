@@ -63,9 +63,11 @@ public class GUI extends JFrame {
 
         //labels configuration and assignation
         JLabel instruction = new JLabel("Selected the files that will create the video. Can be images or videos.");
+        JLabel limitation = new JLabel("Select at least 3 files.");
         JLabel caption = new JLabel("Write a short prompt that describes the mood of the video.");
 
         rows[0].add(instruction);
+        rows[0].add(limitation);
         rows[1].add(caption);
     }
 
@@ -177,8 +179,9 @@ public class GUI extends JFrame {
 
     }
 
+    //validates if there is a prompt and at least 3 files
     private void checkGenerateButtonState() {
-        if(!prompt.getText().isEmpty() && !inputFiles.isEmpty()){
+        if(!prompt.getText().isEmpty() && inputFiles.size() > 3) {
             generateVideoButton.setEnabled(true);
             givenPrompt = prompt.getText();
         }
